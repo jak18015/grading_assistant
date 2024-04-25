@@ -25,7 +25,10 @@ class GradingAssistant:
             try:
                 points: float = float(input(f"0-{points_possible} points: "))
                 if 0 <= points <= points_possible:
-                    return points
+                    if points % 1 == 0:
+                        return int(points)
+                    else:
+                        return points
             except ValueError:
                 print("Error: Invalid input, try again...\n")
 
@@ -47,6 +50,8 @@ class GradingAssistant:
                 ValueError
 
         final_score = sum(self.grade_values)
+        if final_score % 1 == 0:
+            final_score = int(final_score)
         total_points = sum(self.points_poss)
 
         if total_points == 0:
