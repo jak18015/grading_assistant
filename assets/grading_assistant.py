@@ -27,8 +27,7 @@ class GradingAssistant:
                 if 0 <= points <= points_possible:
                     return points
             except ValueError:
-                print("Invalid response, try again.\n")
-                pass
+                print("Error: Invalid input, try again...\n")
 
     def _get_critiques(self, points, points_possible):
         if points < points_possible:
