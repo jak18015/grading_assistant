@@ -27,12 +27,13 @@ class GradingAssistant:
                 if 0 <= points <= points_possible:
                     return points
             except ValueError:
+                print("Invalid response, try again.\n")
                 pass
 
     def _get_critiques(self, points, points_possible):
         if points < points_possible:
             return input("Reason: ")
-        return ""
+        return ""    
 
     def summarize(self):
         print("\n\n\nGRADE SUMMARY\n")
