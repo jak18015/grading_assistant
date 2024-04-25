@@ -1,21 +1,29 @@
 class GradingAssistant:
     def __init__(self, rubric_dict):
-        self.criteria = list(rubric_dict.keys())
-        self.points_poss = list(rubric_dict.values())
-        self.grade_values = []
-        self.critiques = []
+        self.rubric_dict = rubric_dict
+        self.grade_values = dict({})
+        self.critiques = dict({})
+        self.depth = 2
+    def iterate_over_dictionary(self, d):
+        if not isinstance(d, dict):
+            return None
+        for key, value in d.items():
+            if isinstance(key, dict):
+                self.depth += 1
+                self.iterate_over_dictionary(key)
+            else:
+               self.grader(key, value)
 
-    def grade(self):
-        print("\n\n\n")
-        for criterion, points_possible in zip(self.criteria,
-                                             self.points_poss):
-            self._print_criterion(criterion, points_possible)
-            points = self._get_valid_points(points_possible)
-            critique = self._get_critiques(points, points_possible)
-            self.grade_values.append(points)
-            self.critiques.append(critique)
-
-        return self.grade_values
+    def grader(self, header, dictionary):
+        print(f'\n{header}')
+        self.grade_values[header] = {}
+        self.critiques[header] = {}
+        for key, value in dictionary.items():
+            self._print_criterion(key, value)
+            points = self._get_valid_points(value)
+            critique = self._get_critiques(points, value)
+            self.grade_values[header][key] = int(points)
+            self.critiques[header][key] = critique
 
     def _print_criterion(self, criterion, points_possible):
         print(f"{criterion} ({points_possible} points)")
@@ -23,13 +31,15 @@ class GradingAssistant:
     def _get_valid_points(self, points_possible):
         while True:
             try:
-                points: float = float(input(f"0-{points_possible} points: "))
-                if 0 <= points <= points_possible:
+                points: int = int(input(f"0-{points_possible} points: "))
+                if isinstance(points, int) and 0 <= points <= points_possible:
                     if points % 1 == 0:
                         return int(points)
                     else:
                         return points
             except ValueError:
+                print("Error: Invalid input, try again...\n")
+            except TypeError:
                 print("Error: Invalid input, try again...\n")
 
     def _get_critiques(self, points, points_possible):
@@ -38,24 +48,21 @@ class GradingAssistant:
         return ""    
 
     def summarize(self):
-        print("\n\n\nGRADE SUMMARY\n")
-        for i, (criterion, grade, critique) in enumerate(
-                zip(self.criteria, self.grade_values, self.critiques)):
-            points_possible = self.points_poss[i]
-            if not critique:
-                print(f"{criterion}\n   {grade}/{points_possible}")
-            elif critique:
-                print(f"{criterion}\n   {grade}/{points_possible}: {critique}")
-            else:
-                ValueError
+        final_score: int = 0
+        total_points: int = 0
+        for keys_0 in self.rubric_dict:
+            print(f'{keys_0}')
+            for keys_1 in self.rubric_dict[keys_0]:
+                print(f'    {keys_1}\n',
+                      f'        ',
+                      f'{self.grade_values[keys_0][keys_1]}',
+                      f'/',
+                      f'{self.rubric_dict[keys_0].get(keys_1)}',
+                      f'{self.critiques[keys_0][keys_1]}'
+                      )
+                final_score += self.grade_values[keys_0].get(keys_1)
+                total_points += int(self.rubric_dict[keys_0].get(keys_1))
+        
+        print(f'Final score:',
+              f'{final_score}/{total_points} ({final_score/total_points:.2%})')
 
-        final_score = sum(self.grade_values)
-        if final_score % 1 == 0:
-            final_score = int(final_score)
-        total_points = sum(self.points_poss)
-
-        if total_points == 0:
-            print("Error: Total points is zero")
-        else:
-            print(f"\nFinal score:\n{final_score}/{total_points}"
-                  f"({final_score/total_points:.2%})")
