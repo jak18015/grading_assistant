@@ -1,7 +1,0 @@
-{
-    "editor.defaultFormatter": "ms-python.autopep8",
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.autopep8"
-    },
-    "editor.defaultFoldingRangeProvider": "ms-python.autopep8"
-}
