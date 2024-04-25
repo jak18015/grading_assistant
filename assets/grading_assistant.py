@@ -23,7 +23,7 @@ class GradingAssistant:
     def _get_valid_points(self, points_possible):
         while True:
             try:
-                points = int(input(f"0-{points_possible} points: "))
+                points: float = float(input(f"0-{points_possible} points: "))
                 if 0 <= points <= points_possible:
                     return points
             except ValueError:
