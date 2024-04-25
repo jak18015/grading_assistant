@@ -52,4 +52,5 @@ class GradingAssistant:
         if total_points == 0:
             print("Error: Total points is zero")
         else:
-            print(f"\nFinal score:\n{final_score}/{total_points}")
+            print(f"\nFinal score:\n{final_score}/{total_points}"
+                  f"({final_score/total_points:.2%})")
