@@ -1,4 +1,4 @@
-class Grade:
+class GradingAssistant:
     def __init__(self, rubric_dict):
         self.criteria = list(rubric_dict.keys())
         self.points_poss = list(rubric_dict.values())
@@ -34,8 +34,8 @@ class Grade:
             return input("Reason: ")
         return ""
 
-    def grade_printout(self):
-        print("\n\n\nGRADE PRINTOUT\n")
+    def summarize(self):
+        print("\n\n\nGRADE SUMMARY\n")
         for i, (criterion, grade, critique) in enumerate(
                 zip(self.criteria, self.grade_values, self.critiques)):
             points_possible = self.points_poss[i]
