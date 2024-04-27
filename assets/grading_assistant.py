@@ -22,7 +22,7 @@ class GradingAssistant:
             self._print_criterion(key, value)
             points = self._get_valid_points(value)
             critique = self._get_critiques(points, value)
-            self.grade_values[header][key] = int(points)
+            self.grade_values[header][key] = points
             self.critiques[header][key] = critique
 
     def _print_criterion(self, criterion, points_possible):
@@ -31,8 +31,8 @@ class GradingAssistant:
     def _get_valid_points(self, points_possible):
         while True:
             try:
-                points: int = int(input(f"0-{points_possible} points: "))
-                if isinstance(points, int) and 0 <= points <= points_possible:
+                points = float(input(f"0-{points_possible} points: "))
+                if isinstance(points, float) and 0 <= points <= points_possible:
                     if points % 1 == 0:
                         return int(points)
                     else:
@@ -63,6 +63,16 @@ class GradingAssistant:
                 final_score += self.grade_values[keys_0].get(keys_1)
                 total_points += int(self.rubric_dict[keys_0].get(keys_1))
         
+        if final_score % 1 == 0:
+            final_score = int(final_score)
+
         print(f'Final score:',
               f'{final_score}/{total_points} ({final_score/total_points:.2%})')
 
+    def debug(self):
+        final_score: float = 0
+        total_points: int = 0
+        for keys_0 in self.rubric_dict:
+            for keys_1 in self.rubric_dict[keys_0]:
+                print(f'{self.grade_values[keys_0].get(keys_1)}')
+                print(f'type: {type(self.grade_values[keys_0].get(keys_1))}')
